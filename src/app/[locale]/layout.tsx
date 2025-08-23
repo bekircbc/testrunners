@@ -18,10 +18,10 @@ export default async function LocaleLayout({
 }) {
   const messages = await getMessages();
   return (
-    <html lang={params.locale}>
+    <html lang={params.locale | "de"}>
       <body style={{ margin: 0, padding: 0 }}>
         <Providers messages={messages}>
-          <LayoutClient locale={params.locale}>
+          <LayoutClient locale={params.locale | "de"}>
             {children}
           </LayoutClient>
         </Providers>
