@@ -11,17 +11,7 @@ function slugify(str: string) {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 }
-import { Card, CardContent, CardMedia, Typography, Box } from '@mui/material';
-
-function SectionDivider({ label }: { label: string }) {
-  return (
-    <Box sx={{ display: 'flex', alignItems: 'center', my: 4 }}>
-      <Box sx={{ flex: 1, height: 2, bgcolor: 'primary.main', opacity: 0.2, borderRadius: 2 }} />
-      <Typography sx={{ mx: 2, fontWeight: 600, color: 'primary.main', letterSpacing: 1 }}>{label}</Typography>
-      <Box sx={{ flex: 1, height: 2, bgcolor: 'primary.main', opacity: 0.2, borderRadius: 2 }} />
-    </Box>
-  );
-}
+import { Card, CardMedia, Typography, Box } from '@mui/material';
 
 function ResponsiveGrid({ items, renderCard, desktop, tablet, mobile }: any) {
   return (
