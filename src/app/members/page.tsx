@@ -14,7 +14,22 @@ function slugify(str: string) {
 }
 import { Card, CardContent, CardMedia, Typography, Box } from '@mui/material';
 
-function ResponsiveGrid({ items, renderCard, desktop, tablet, mobile }: any) {
+interface Member {
+  id: string | number;
+  name: string;
+  role: string;
+  image: string;
+}
+
+interface ResponsiveGridProps {
+  item: Member[];
+  renderCard: (member: Member) => JSX.Element;
+  desktop: number;
+  tablet: number;
+  mobile: number;
+}
+
+function ResponsiveGrid({ items, renderCard, desktop, tablet, mobile }: ResponsiveGridProps) {
   return (
     <Box
       sx={{
@@ -51,7 +66,7 @@ export default function MembersPage() {
         desktop={1}
         tablet={1}
         mobile={1}
-        renderCard={(member: any) => {
+        renderCard={(member: Member) => {
           const slug = slugify(member.name);
           const fullDesc = `${member.name} ist ein ${member.role}. ${'Lorem ipsum '.repeat(20)}`.slice(0, 200);
           const shortDesc = fullDesc.length > 100 ? fullDesc.slice(0, fullDesc.lastIndexOf(' ', 100)) + '...' : fullDesc;
