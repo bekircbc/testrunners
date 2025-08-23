@@ -1,6 +1,7 @@
 "use client";
 import NewsSlider from '../components/NewsSlider';
 import MemberCards from '../components/MemberCards';
+import Image from `next/image`;
 
 export default function Home() {
   return (
@@ -18,7 +19,7 @@ export default function Home() {
           overflow: 'hidden',
         }}
       >
-        <img
+        <Image
           src="/activity1.jpg"
           alt="News Background"
           style={{
