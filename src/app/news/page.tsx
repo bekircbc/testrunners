@@ -13,7 +13,22 @@ function slugify(str: string) {
 }
 import { Card, CardMedia, Typography, Box } from '@mui/material';
 
-function ResponsiveGrid({ items, renderCard, desktop, tablet, mobile }: any) {
+interface Activity {
+  id: string | number;
+  title: string;
+  description: string;
+  image: string;
+}
+
+interface ResponsiveGridProps {
+  item: Member[];
+  renderCard: (member: Member) => JSX.Element;
+  desktop: number;
+  tablet: number;
+  mobile: number;
+}
+
+function ResponsiveGrid({ items, renderCard, desktop, tablet, mobile }: ResponsiveGridProps) {
   return (
     <Box
       sx={{
@@ -47,7 +62,7 @@ export default function NewsPage() {
         desktop={3}
         tablet={2}
         mobile={1}
-        renderCard={(activity: any) => {
+        renderCard={(activity: Activity) => {
           const slug = slugify(activity.title);
           return (
             <Link key={activity.id} href={`/news/${slug}`} style={{ textDecoration: 'none' }}>
