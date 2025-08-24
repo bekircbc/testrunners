@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export async function generateStaticParams() {
-  return [{ locale: 'en' }, { locale: 'tr' }, {locale: 'de'];
+  return [{ locale: 'en' }, { locale: 'tr' }, {locale: 'de'}];
 }
 
 export default function LocaleLayout({
