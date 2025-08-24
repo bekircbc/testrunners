@@ -4,12 +4,12 @@ import MemberCards from '../../../components/MemberCards';
 import { useTranslations } from 'next-intl';
 
 export default function Home() {
-  const t = useTranslations();
+  const t = useTranslations('home');
   return (
     <main>
       <div style={{ maxWidth: 900, margin: '0 auto', padding: 16 }}>
         <ActivityHero />
-        <h2 style={{ marginTop: 32 }}>{t('home.members')}</h2>
+        <h2 style={{ marginTop: 32 }}>{t('members')}</h2>
         <MemberCards />
       </div>
     </main>
