@@ -25,9 +25,7 @@ export default function LocaleLayout({
     <html lang={params.locale}>
       <body style={{ margin: 0, padding: 0 }}>
         <Providers messages={messages}>
-          <LayoutClient locale={params.locale}>
-            {children}
-          </LayoutClient>
+          <LayoutClient children={children} locale={params.locale}/>
         </Providers>
       </body>
     </html>
