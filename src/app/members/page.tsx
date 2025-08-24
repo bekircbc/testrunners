@@ -23,7 +23,7 @@ interface Member {
 
 interface ResponsiveGridProps {
   item: Member[];
-  renderCard: (member: Member) => React.Element;
+  renderCard: (member: Member) => React.ReactElement;
   desktop: number;
   tablet: number;
   mobile: number;
