@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 interface LayoutProps {
-  children: ReactNode;
+  children: React.ReactNode;
   params: Promise<{ locale: string }>;
 }
 
