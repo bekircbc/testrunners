@@ -1,17 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const locales = ['en', 'de', 'tr'];
-const defaultLocale = 'de';
-
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Eğer yol locale ile başlamıyorsa, default locale'a yönlendir
-  if (
-    pathname === '/' ||
-    !locales.some((locale) => pathname.startsWith(`/${locale}`))
-  ) {
-    return NextResponse.redirect(new URL(`/${defaultLocale}${pathname}`, request.url));
+  // Sadece anasayfa isteğinde yönlendir
+  if (pathname === '/') {
+    return NextResponse.redirect(new URL('/de', request.url));
   }
 
   return NextResponse.next();
