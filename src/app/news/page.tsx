@@ -22,7 +22,7 @@ interface Activity {
 }
 
 interface ResponsiveGridProps {
-  items: Actvity[];
+  items: Activity[];
   renderCard: (activity: Activity) => React.ReactElement;
   desktop: number;
   tablet: number;
