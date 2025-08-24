@@ -3,10 +3,10 @@ import Header from "./Header";
 import Footer from "./Footer";
 import ClientMuiProvider from "./ClientMuiProvider";
 
-export default function LayoutClient({ children, locale }: { children: React.ReactNode, locale: string }) {
+export default function LayoutClient({ children }: { children: React.ReactNode }) {
   return (
     <ClientMuiProvider>
-      <Header locale={locale} />
+      <Header />
       <main style={{ flex: 1 }}>
         {children}
       </main>
