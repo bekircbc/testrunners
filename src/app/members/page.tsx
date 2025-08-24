@@ -1,4 +1,4 @@
-
+import React from "react";
 import Link from 'next/link';
 import members from '../../data/members';
 
@@ -23,7 +23,7 @@ interface Member {
 
 interface ResponsiveGridProps {
   item: Member[];
-  renderCard: (member: Member) => JSX.Element;
+  renderCard: (member: Member) => React.Element;
   desktop: number;
   tablet: number;
   mobile: number;
