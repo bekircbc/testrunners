@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 interface LayoutProps {
   children: ReactNode;
-  params: Promise<{ locale: string >;
+  params: Promise<{ locale: string }>;
 }
 
 export async function generateStaticParams() {
