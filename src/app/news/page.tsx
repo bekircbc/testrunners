@@ -1,3 +1,4 @@
+import React from "react";
 import activities from '../../data/activities';
 import Link from 'next/link';
 
@@ -21,8 +22,8 @@ interface Activity {
 }
 
 interface ResponsiveGridProps {
-  item: Member[];
-  renderCard: (member: Member) => JSX.Element;
+  items: Actvity[];
+  renderCard: (activity: Activity) => React.ReactElement;
   desktop: number;
   tablet: number;
   mobile: number;
