@@ -25,6 +25,7 @@ const navLinks = [
   { label: 'News', href: '/news' },
   { label: 'Über uns', href: '/members' },
   { label: 'Events', href: '/events' },
+  { label: 'Galery', href: '/galery' },
   { label: 'Kontakt', href: '/contact' },
 ];
 
