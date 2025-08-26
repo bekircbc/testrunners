@@ -6,10 +6,18 @@ import activities from "../../data/activities";
 import Image from "next/image";
 
 export default function GaleryPage() {
+
+  type Activity = {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+};
+  
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);
 
-  const handleOpen = (activity) => {
+  const handleOpen = (activity:Activity) => {
     setSelected(activity);
     setOpen(true);
   };
