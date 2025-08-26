@@ -15,7 +15,7 @@ export default function GaleryPage() {
 };
   
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState<Activity | null>(null);
 
   const handleOpen = (activity:Activity) => {
     setSelected(activity);
