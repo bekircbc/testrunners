@@ -20,14 +20,23 @@ export default function NewsDetail({ params }: { params: { slug: string } }) {
   return (
     <main>
       <Box sx={{ maxWidth: 900, mx: 'auto', mt: 6 }}>
-        <Card sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', p: 2, minHeight: 280 }}>
+        <Card sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: 'center', justifyContent:'center', p: 2, minHeight: 280 }}>
           <CardMedia
             component="img"
             image={activity.image}
             alt={activity.title}
-            sx={{ width: 280, height: 280, objectFit: 'cover', borderRadius: '16px', mr: 4 }}
+            sx={{
+              width: { xs: '100%', md: 280 },
+              height: { xs: 220, md: 280 },
+              objectFit: 'cover',
+              borderRadius: '16px',
+              mb: { xs: 2, md: 0 },
+              mr: { xs: 0, md: 4 },
+              mx: 'auto',
+              display: 'block',
+            }}
           />
-          <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', p: 0, pt: 3 }}>
+          <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: { xs: 'center', md: 'flex-start' }, justifyContent: 'center', p: 0, pt: 3, textAlign: { xs: 'center', md: 'left' }, }}>
             <Typography variant="h4" sx={{ fontWeight: 700, mb: 2 }}>{activity.title}</Typography>
             <Typography variant="body1" sx={{ mb: 3, fontSize: 20 }}>{activity.description}</Typography>
             <Typography variant="body2" sx={{ color: '#555', fontSize: 17 }}>
