@@ -38,13 +38,18 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy via SSH to Hetzner
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: 167.235.61.203
+       - name: Deploy via SSH to Hetzner
+         uses: appleboy/ssh-action@v1.0.3
+         with:
+          host: ${{ secrets.HETZNER_HOST }}
           username: root
-          key: ${{ secrets.HETZNER_SSH_KEY }} # We will set this secret in GitHub next
+          key: ${{ secrets.HETZNER_SSH_KEY }}
           script: |
             cd /var/www/my-awesome-app
+            # Remove any standalone container instance if present to avoid name collisions
+            docker rm -f testrunners_nextjs || true
+            # Pull latest image and recreate container seamlessly
             docker compose pull testrunners-app
-            docker compose up -d testrunners-app
+            docker compose up -d --force-recreate testrunners-app
+            # Prune old dangling images to save disk space
+            docker image prune -f
