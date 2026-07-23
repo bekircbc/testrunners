@@ -38,18 +38,32 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
-       - name: Deploy via SSH to Hetzner
-         uses: appleboy/ssh-action@v1.0.3
-         with:
+      - name: Checkout repository code for SCP
+        uses: actions/checkout@v4
+
+      # Syncs docker-compose.yml from the repo to the Hetzner server
+      - name: Copy docker-compose.yaml to Hetzner
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HETZNER_HOST }}
+          username: root
+          key: ${{ secrets.HETZNER_SSH_KEY }}
+          source: "docker-compose.yaml"
+          target: "/var/www/my-awesome-app"
+
+      - name: Deploy via SSH to Hetzner
+        uses: appleboy/ssh-action@v1.0.3
+        with:
           host: ${{ secrets.HETZNER_HOST }}
           username: root
           key: ${{ secrets.HETZNER_SSH_KEY }}
           script: |
             cd /var/www/my-awesome-app
-            # Remove any standalone container instance if present to avoid name collisions
-            docker rm -f testrunners_nextjs || true
-            # Pull latest image and recreate container seamlessly
+            # Stop and remove lingering/conflicting containers
+            docker stop production_nginx testrunners_nextjs || true
+            docker rm production_nginx testrunners_nextjs || true
+            
+            # Pull latest image and recreate container with mapped port 3000
             docker compose pull testrunners-app
             docker compose up -d --force-recreate testrunners-app
-            # Prune old dangling images to save disk space
             docker image prune -f
