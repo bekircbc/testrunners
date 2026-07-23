@@ -11,14 +11,20 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV production
 
-# Copy required assets from the builder stage
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./.next/standalone
-COPY --from=builder /app/.next/static ./.next/static
-
-EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
-# Next.js standalone output expects server.js
-CMD ["node", ".next/standalone/server.js"]
+# 1. Copy public directory assets to /app/public
+COPY --from=builder /app/public ./public
+
+# 2. Copy standalone output directly into the WORKDIR (/app)
+# Next.js standalone expects files to be served from the application root
+COPY --from=builder /app/.next/standalone ./
+
+# 3. Copy static CSS/JS assets into the path expected by standalone output
+COPY --from=builder /app/.next/static ./.next/static
+
+EXPOSE 3000
+
+# Execute server.js directly from the application root
+CMD ["node", "server.js"]
