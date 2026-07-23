@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  testrunners-app:
+    image: ghcr.io/bekircbc/testrunners:latest
+    container_name: testrunners_nextjs
+    restart: always
+    ports:
+      # Maps port 3000 to the host so Traefik (172.17.0.1:3000) can reach it
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
