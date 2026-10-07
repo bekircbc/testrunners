@@ -1,0 +1,89 @@
+name: DevSecOps CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # =========================================================================
+  # JOB 1: Security Scanning, Code Quality & Unit/Integration Testing (SAST)
+  # =========================================================================
+  security-and-quality:
+    name: Security Scan & Testing
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Fetch the complete Git commit history for secret detection
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Complete history is required by Gitleaks to inspect past commits
+
+      # Step 2: Scan commit history for hardcoded secrets, tokens, and credentials (OWASP A07)
+      - name: Gitleaks Secret Scanning
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # The pipeline fails immediately if any hardcoded API key, private key, or token is detected
+
+      # Step 3: Configure Node.js environment with npm caching enabled
+      - name: Setup Node.js runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      # Step 4: Install dependencies in a deterministic manner using package-lock.json
+      - name: Install dependencies
+        run: npm ci
+
+      # Step 5: Enforce static typing and linting rules
+      - name: Execute Type-Check & Linter
+        run: |
+          npm run type-check
+          npm run lint
+
+      # Step 6: Run isolated unit and integration tests with code coverage reporting
+      - name: Run Vitest Unit & Integration Tests
+        run: npm run test:unit -- --coverage
+
+  # =========================================================================
+  # JOB 2: Docker Multi-Stage Build & Container Vulnerability Scanning
+  # =========================================================================
+  docker-build-and-scan:
+    name: Container Build & Vulnerability Scan
+    needs: security-and-quality # Executes only after static analysis and unit tests pass
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout codebase for Docker image build
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+
+      # Step 2: Initialize Docker Buildx for advanced caching and multi-stage builds
+      - name: Set up Docker Buildx
+        uses: actions/docker-buildx-action@v3
+
+      # Step 3: Build local Docker image based on multi-stage Dockerfile
+      - name: Build standalone Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./docker/Dockerfile
+          load: true # Loads image into local Docker daemon so Trivy can scan it
+          tags: my-app:${{ github.sha }}
+
+      # Step 4: Scan built image for OS-level and package-level CVEs
+      - name: Trivy Container Vulnerability Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'my-app:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1' # Aborts workflow if HIGH or CRITICAL vulnerabilities are detected
+          ignore-unfixed: true # Filters out vulnerabilities without available vendor fixes
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
+      # Note: In a CD environment, a succeeding Trivy scan triggers image push to Container Registry (ECR/GHCR)
